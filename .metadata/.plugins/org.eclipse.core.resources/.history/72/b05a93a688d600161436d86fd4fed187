@@ -1,0 +1,12 @@
+package gamestates;
+
+import boards.DiceBoard;
+
+public class GameInstance {
+	
+	public DiceBoard diceGameBoard;
+	
+	public GameInstance() {
+		
+	}
+}

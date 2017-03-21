@@ -1,0 +1,127 @@
+package gui;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Font;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+
+import boardComponents.Board;
+import boardComponents.MatrixPair;
+
+
+public class GameBoard extends JFrame {
+
+	private JFrame frame;
+	private JPanel boardPane;
+	private JPanel playerPane;
+	private String numOfPlayers;
+	public Board board;
+	private JButton[][] boardSquares;
+	private JButton rollButton;
+	private JTextField turnText;
+	private JTextField rolledText;
+	private int roll;
+	
+
+	/**
+	 * Create the frame.
+	 */
+	public GameBoard(String numOfPlayers, Board board) {
+		this.numOfPlayers = numOfPlayers;
+		this.board = board;
+		boardSquares = new JButton[board.getSizeOfBoard()][board.getSizeOfBoard()];
+		this.roll = 0;
+	}
+	
+	@Override
+	public void run() {
+		frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(100, 100, 450, 300);
+		
+		//creates the pane to tell what players turn it is and to click the roll button
+		GridBagLayout gbl_playerPane = new GridBagLayout();
+		gbl_playerPane.rowHeights = new int[]{64};
+		gbl_playerPane.columnWidths = new int[]{205, 455, 263, 386};
+		gbl_playerPane.columnWeights = new double[]{0.0, 0.0, 1.0, 1.0};
+		playerPane = new JPanel(gbl_playerPane);
+		turnText = new JTextField();
+		turnText.setFont(new Font("Tahoma", Font.BOLD, 18));
+		turnText.setEditable(false);
+		turnText.setText("Turn: ");
+		GridBagConstraints gbc_txtTurn = new GridBagConstraints();
+		gbc_txtTurn.insets = new Insets(0, 0, 0, 5);
+		gbc_txtTurn.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtTurn.gridx = 1;
+		gbc_txtTurn.gridy = 0;
+		playerPane.add(turnText, gbc_txtTurn);
+		turnText.setColumns(10);
+		rollButton = new JButton("Roll");
+		rollButton.setEnabled(false);
+		rollButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				roll = getRandomRoll();
+			}
+		});
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
+		gbc_btnNewButton.gridx = 2;
+		gbc_btnNewButton.gridy = 0;
+		playerPane.add(rollButton, gbc_btnNewButton);
+		rolledText = new JTextField();
+		rolledText.setFont(new Font("Tahoma", Font.BOLD, 17));
+		rolledText.setText("Rolled:");
+		rolledText.setEditable(false);
+		GridBagConstraints gbc_rolledText = new GridBagConstraints();
+		gbc_rolledText.fill = GridBagConstraints.HORIZONTAL;
+		gbc_rolledText.gridx = 3;
+		gbc_rolledText.gridy = 0;
+		playerPane.add(rolledText, gbc_rolledText);
+		rolledText.setColumns(10);
+		frame.getContentPane().add(playerPane, BorderLayout.SOUTH);
+		
+		boardPane = new JPanel(new GridLayout(0, board.getSizeOfBoard()));
+		boardPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		Insets buttonMargin = new Insets(0,0,0,0);
+		//creating the matrix of the buttons on the board
+		for(int i = 0; i < boardSquares.length; i++) {
+			for(int j = 0; j < boardSquares[i].length; j++) {
+				JButton tempButton = new JButton();
+				tempButton.setMargin(buttonMargin);
+				tempButton.setText("" + board.numContainedInSquare(i, j));
+				tempButton.setEnabled(false);
+				boardPane.add(tempButton);
+			}
+		}
+		frame.getContentPane().add(boardPane, BorderLayout.CENTER);
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		frame.setVisible(true);
+	}
+	
+	public void setRollButton() {
+		this.rollButton.setEnabled(true);
+		System.out.println("Trying to set the roll button clickable");
+	}
+	
+	public int getRandomRoll() {
+		int roll;
+		roll = (int) Math.ceil(Math.random() *6) + (int) Math.ceil(Math.random() * 6);
+		System.out.println(roll);
+		return roll;
+	}
+	
+	public void updatePossibleMoves(MatrixPair[] mp) {
+		
+	}
+}

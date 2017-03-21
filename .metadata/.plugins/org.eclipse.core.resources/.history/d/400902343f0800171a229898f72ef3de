@@ -1,0 +1,23 @@
+package players;
+
+import boardComponents.MatrixPair;
+import gamestates.GameInstance;
+
+public class Player {
+	
+	private int playerIDNum;
+	private boolean isHuman;
+	private AI ai;
+	
+	public Player(int playerIDNum, boolean isHuman) {
+		this.playerIDNum = playerIDNum;
+		this.isHuman = isHuman;
+		if(isHuman == false) {
+			ai = new AI();
+		}
+	}
+	
+	public int getPlayerIDNumber() {
+		return playerIDNum;
+	}
+}

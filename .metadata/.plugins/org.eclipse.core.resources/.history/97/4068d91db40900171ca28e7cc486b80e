@@ -1,0 +1,54 @@
+package gamestates;
+
+import java.util.ArrayList;
+
+import boardComponents.Board;
+import boardComponents.MatrixPair;
+
+public class CheckMove {
+	
+	public Board board;
+	
+	public CheckMove(Board board) {
+		this.board = board;
+	}
+	
+	/*
+	 * Param: roll = the number rolled by the current player
+	 * Return: returns an array of MatrixPairs of the possible moves that can be made by the current player
+	 */
+	public MatrixPair[] checkDiceMoves(int roll) {
+		MatrixPair[] mp = new MatrixPair[4];
+		int mpPos = 0;
+		
+		for(int i = 0; i < board.getSizeOfBoard(); i++) {
+			for(int j = 0; j < board.getSizeOfBoard(); j++) {
+				int numInSqu = board.numContainedInSquare(i, j);
+				
+				if(numInSqu == roll) {
+					mp[mpPos] = new MatrixPair(i, j);
+					mpPos++;
+				}
+			}
+		}
+	
+		return mp;
+	}
+	
+	public MatrixPair[] checkDiceMovesTen(int playerID) {
+		ArrayList<MatrixPair> mpList = new ArrayList(); //to hold the MatrixPairs to put in a normal array later without going through more than once
+		for(int i = 0; i < board.getSizeOfBoard(); i++) {
+			for(int j = 0; j < board.getSizeOfBoard(); j++) {
+				
+				if(board.isSqaureTaken(i, j) == true) {
+					if(board.playerIDInSqaure(i, j) != playerID) {
+						if(board.numContainedInSquare(i, j) != 2 && board.numContainedInSquare(i, j) != 12) {
+							mpList.add(new MatrixPair(i, j));
+						}
+					}
+				}
+				
+			}
+		}
+	}
+}
